@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spot Parkir</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        main {
+            flex: 1;
+            width: 90%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .status-info {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .parking-area {
+            margin-bottom: 40px;
+        }
+
+        .area-title {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .parking-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .parking-spot {
+            background-color: #fff;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            width: 90px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .parking-spot h3 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .available {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .occupied {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .parking-spot button:hover {
+            opacity: 0.8;
+            transform: scale(1.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .parking-spot {
+                width: 80px;
+            }
+            .area-title {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .parking-spot {
+                width: 70px;
+            }
+            header {
+                font-size: 14px;
+            }
+            .area-title {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <p>Menampilkan status tempat parkir</p>
+        <p>Politeknik Negeri Malang</p>
+    </header>
+
+    <main>
+        <!-- Informasi Status -->
+        <div class="status-info">
+            <div id="availableSpots">Spots Tersedia: 0</div>
+            <div id="vehiclesIn">Kendaraan Masuk: 0</div>
+            <div id="vehiclesOut">Kendaraan Keluar: 0</div>
+        </div>
+
+        <!-- Area Parkir 1 -->
+        <div class="parking-area">
+            <div class="area-title">Gedung A</div>
+            <div class="parking-grid">
+                <!-- A1-A6 -->
+                <div class="parking-spot"><h3>A1</h3><button class="available" onclick="changeStatus(this)">Tersedia</button></div>
+                <div class="parking-spot"><h3>A2</h3><button class="available" onclick="changeStatus(this)">Tersedia</button></div>
+                <div class="parking-spot"><h3>A3</h3><button class="available" onclick="changeStatus(this)">Tersedia</button></div>
+                <div class="parking-spot"><h3>A4</h3><button class="available" onclick="changeStatus(this)">Tersedia</button></div>
+                <div class="parking-spot"><h3>A5</h3><button class="available" onclick="changeStatus(this)">Tersedia</button></div>
+                <div class="parking-spot"><h3>A6</h3><button class="available" onclick="changeStatus(this)">Tersedia</button></div>
+            </div>
+        </div>
+
+        <!-- Area Parkir 2 -->
+        <div class="parking-area">
+            <div class="area-title">Gedung B</div>
+            <div class="parking-grid">
+                <!-- B1-B6 -->
+                <div class="parking-spot"><h3>B1</h3><button class="available" onclick="changeStatus(this)">Tersedia</button></div>
+                <div class="parking-spot"><h3>B2</h3><button class="available" onclick="changeStatus(this)">Tersedia</button></div>
+                <div class="parking-spot"><h3>B3</h3><button class="available" onclick="changeStatus(this)">Tersedia</button></div>
+                <div class="parking-spot"><h3>B4</h3><button class="available" onclick="changeStatus(this)">Tersedia</button></div>
+                <div class="parking-spot"><h3>B5</h3><button class="available" onclick="changeStatus(this)">Tersedia</button></div>
+                <div class="parking-spot"><h3>B6</h3><button class="available" onclick="changeStatus(this)">Tersedia</button></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Spot Parkir © 2025</p>
+    </footer>
+
+    <script>
+        let availableSpots = 12;
+        let vehiclesIn = 0;
+        let vehiclesOut = 0;
+
+        const password = "mupticakep";
+        let isAuthorized = false;
+
+        function askForPassword() {
+            const userPassword = prompt("Masukkan password untuk mengakses tombol parkir:");
+            if (userPassword === password) {
+                isAuthorized = true;
+                alert("Akses Diberikan! Kamu dapat mengubah status parkir.");
+            } else {
+                alert("Password salah! Akses ditolak.");
+            }
+        }
+
+        function changeStatus(button) {
+            if (!isAuthorized) {
+                alert("Akses tidak diberikan! Silakan masukkan password terlebih dahulu.");
+                askForPassword();
+                return;
+            }
+
+            if (button.classList.contains('available')) {
+                button.classList.remove('available');
+                button.classList.add('occupied');
+                button.textContent = 'Terisi';
+                availableSpots--;
+                vehiclesIn++;
+            } else {
+                button.classList.remove('occupied');
+                button.classList.add('available');
+                button.textContent = 'Tersedia';
+                availableSpots++;
+                vehiclesOut++;
+            }
+
+            document.getElementById("availableSpots").textContent = "Spots Tersedia: " + availableSpots;
+            document.getElementById("vehiclesIn").textContent = "Kendaraan Masuk: " + vehiclesIn;
+            document.getElementById("vehiclesOut").textContent = "Kendaraan Keluar: " + vehiclesOut;
+        }
+    </script>
+</body>
+</html>
